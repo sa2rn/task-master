@@ -183,7 +183,7 @@ describe('/api/tasks/*', function() {
       assert.equal(count, 0)
     })
 
-    it('delete not existing task', async function() {
+    it('delete not my task', async function() {
       const task = await Task.create({ UserId: users[1].id, ProjectId: projects[3].id, title: 'Task one' })
 
       await request(app)
