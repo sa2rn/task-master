@@ -20,7 +20,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('Projects', fakeArray((index) => {
       return {
-        userId: users[0].id,
+        UserId: users[0].id,
         title: `Project ${index}`,
         description: `Some stuff about Project ${index}`,
         createdAt: new Date(),
@@ -36,8 +36,8 @@ module.exports = {
 
     await queryInterface.bulkInsert('Tasks', fakeArray((index) => {
       return {
-        userId: users[0].id,
-        projectId: projects[0].id,
+        UserId: users[0].id,
+        ProjectId: projects[0].id,
         title: `Task ${index}`,
         description: `Some stuff about Task ${index}`,
         createdAt: new Date(),

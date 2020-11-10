@@ -1,26 +1,26 @@
 const request = require('supertest')
 const { assert } = require('chai')
 const app = require('../app')
-const { User, Project } = require('../models')
+const { User, Project, sequelize } = require('../models')
 
 describe('/api/projects/*', function() {
-  let user
+  let users
 
-  beforeEach(async function() {
-    user = await User.create({ username: 'demo', password: 'password' })
+  before(async function() {
+    await sequelize.sync({ force: true })
+    users = await Promise.all([
+      User.create({ username: 'demo', password: 'password' }),
+      User.create({ username: 'demo2', password: 'password' })
+    ])
   })
 
   afterEach(async function() {
-    await User.destroy({ where: {} })
+    await Project.destroy({ where: {} })
   })
 
-  // beforeEach(async function() {
-  //   await User.create({ username: 'demo', password: 'password' })
-  // })
-
-  // afterEach(async function() {
-  //   await User.destroy({ where: {} })
-  // })
+  after(async function() {
+    await User.destroy({ where: {} })
+  })
 
   describe('GET /api/projects', function() {
     it('Unauthorized', async function() {
@@ -33,16 +33,18 @@ describe('/api/projects/*', function() {
     it('empty projects', async function() {
       await request(app)
         .get('/api/projects')
-        .set('Authorization', `Bearer ${user.genToken()}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
         .set('Accept', 'application/json')
         .expect(200, [])
     })
 
-    it('one project', async function() {
-      await Project.create({ UserId: user.id, title: 'Project one' })
+    it('get only my projects', async function() {
+      await Project.create({ UserId: users[0].id, title: 'Project one' })
+      await Project.create({ UserId: users[1].id, title: 'Project another' })
+
       await request(app)
         .get('/api/projects')
-        .set('Authorization', `Bearer ${user.genToken()}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
         .set('Accept', 'application/json')
         .expect(200)
         .then(response => {
@@ -57,7 +59,7 @@ describe('/api/projects/*', function() {
           title: 'Project One',
           description: 'Some stuff about Project One'
         })
-        .set('Authorization', `Bearer ${user.genToken()}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
         .set('Accept', 'application/json')
         .expect(200)
         .then(response => {
@@ -69,15 +71,11 @@ describe('/api/projects/*', function() {
     })
 
     it('retrieve project', async function() {
-      const project = await Project.create({ UserId: user.id, title: 'Project one' })
+      const project = await Project.create({ UserId: users[0].id, title: 'Project one' })
 
       await request(app)
         .get(`/api/projects/${project.id}`)
-        .send({
-          title: 'Project One',
-          description: 'Some stuff about Project One'
-        })
-        .set('Authorization', `Bearer ${user.genToken()}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
         .set('Accept', 'application/json')
         .expect(200)
         .then(response => {
@@ -88,9 +86,19 @@ describe('/api/projects/*', function() {
         })
     })
 
+    it('try retrieve project from another user', async function() {
+      const project = await Project.create({ UserId: users[1].id, title: 'Project one' })
+
+      await request(app)
+        .get(`/api/projects/${project.id}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
+        .set('Accept', 'application/json')
+        .expect(404)
+    })
+
     it('update project', async function() {
       const project = await Project.create({
-        UserId: user.id,
+        UserId: users[0].id,
         title: 'Project one',
         description: 'Some stuff about Project One'
       })
@@ -100,13 +108,41 @@ describe('/api/projects/*', function() {
         .send({
           title: 'Project 1'
         })
-        .set('Authorization', `Bearer ${user.genToken()}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
         .set('Accept', 'application/json')
         .expect(200)
         .then(response => {
           assert.propertyVal(response.body, 'title', 'Project 1')
           assert.notProperty(response.body, 'description')
         })
+    })
+
+    it('delete project', async function() {
+      const project = await Project.create({
+        UserId: users[0].id,
+        title: 'Project one',
+        description: 'Some stuff about Project One'
+      })
+
+      await request(app)
+        .del(`/api/projects/${project.id}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
+        .set('Accept', 'application/json')
+        .expect(203)
+
+      const count = await Project.count({ where: { UserId: users[0].id } })
+
+      assert.equal(count, 0)
+    })
+
+    it('delete not my project', async function() {
+      const project = await Project.create({ UserId: users[1].id, title: 'Project one' })
+
+      await request(app)
+        .del(`/api/projects/${project.id}`)
+        .set('Authorization', `Bearer ${users[0].genToken()}`)
+        .set('Accept', 'application/json')
+        .expect(404)
     })
   })
 })

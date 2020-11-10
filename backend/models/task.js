@@ -33,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'new',
       validate: {
         isIn: {
-          args: [['new', 'done']]
+          args: [['new', 'done']],
+          msg: 'Only allow \'new\' or \'done\''
         }
       }
     },
@@ -41,13 +42,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0,
       validate: {
+        isInt: {
+          msg: 'Must be int type'
+        },
         min: {
           args: [0],
           msg: 'Only allow value >= 0'
         },
         max: {
-          args: [10],
-          msg: 'Only allow value <= 10'
+          args: [55],
+          msg: 'Only allow value <= 55'
         }
       }
     },

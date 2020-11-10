@@ -70,19 +70,21 @@ exports.create = async(req, res, next) => {
   }
 }
 
-exports.update = [findProject, async(req, res, next) => {
-  try {
-    const { project } = req
-    const { title, description } = req.body
-    project.set({
-      title,
-      description
-    })
-    await project.save()
+exports.update = [
+  findProject,
+  async(req, res, next) => {
+    try {
+      const { project } = req
+      const { title, description } = req.body
+      project.set({
+        title,
+        description
+      })
+      await project.save()
 
-    return res.status(200).json(project)
-  } catch (err) {
-    next(err)
+      return res.status(200).json(project)
+    } catch (err) {
+      next(err)
+    }
   }
-}
 ]

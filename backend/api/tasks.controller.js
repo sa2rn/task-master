@@ -1,19 +1,113 @@
-exports.list = (req, res, next) => {
-  return res.json([])
+const { Task } = require('../models')
+const createError = require('http-errors')
+
+function createListQuery(req) {
+  const dbQuery = {
+    where: { UserId: req.user.id },
+    order: []
+  }
+
+  const { ProjectId, status } = req.query
+
+  if (ProjectId) {
+    dbQuery.where.ProjectId = ProjectId
+  }
+  if (status) {
+    dbQuery.where.status = status
+  }
+
+  return dbQuery
 }
 
-exports.retrieve = (req, res, next) => {
-  return res.json({})
+async function findTask(req, res, next) {
+  try {
+    const task = await Task.findOne({
+      where: { id: req.params.taskId, UserId: req.user.id }
+    })
+
+    if (task) {
+      req.task = task
+      next()
+    } else {
+      next(createError(404))
+    }
+  } catch (err) {
+    next(err)
+  }
 }
 
-exports.remove = (req, res, next) => {
-  return res.status(203).end()
+exports.list = async(req, res, next) => {
+  try {
+    const query = createListQuery(req)
+    const tasks = await Task.findAll(query)
+
+    return res.json(tasks)
+  } catch (err) {
+    next(err)
+  }
 }
 
-exports.create = (req, res, next) => {
-  return res.status(200).json({})
+exports.retrieve = [
+  findTask,
+  (req, res) => {
+    res.json(req.task)
+  }
+]
+
+exports.remove = [
+  findTask,
+  async(req, res, next) => {
+    try {
+      await Task.destroy({
+        where: { id: req.task.id }
+      })
+
+      return res.status(203).end()
+    } catch (err) {
+      next(err)
+    }
+  }
+]
+
+exports.create = async(req, res, next) => {
+  try {
+    const { title, description, ProjectId, priority, status, deadline } = req.body
+    const task = await Task.create({
+      UserId: req.user.id,
+      ProjectId,
+      title,
+      description,
+      priority,
+      status,
+      deadline
+    })
+
+    return res.status(200).json(task)
+  } catch (err) {
+    next(err)
+  }
 }
 
-exports.update = (req, res, next) => {
-  return res.status(200).json({})
-}
+exports.update = [
+  findTask,
+  async(req, res, next) => {
+    try {
+      const { task } = req
+      const { title, description, ProjectId, priority, status, deadline } = req.body
+
+      task.set({
+        ProjectId,
+        title,
+        description,
+        priority,
+        status,
+        deadline
+      })
+      await task.save()
+
+      return res.status(200).json(task)
+    } catch (err) {
+      next(err)
+    }
+  }
+]
