@@ -94,7 +94,7 @@ function Projects() {
         )}
         <ProjectEdit show={modalNewProject.isOpen} onHide={modalNewProject.hide} />
         {editedProject && (
-          <ProjectEdit key={editedProject.opens} project={editedProject} show={modalEditProject.isOpen} onHide={modalEditProject.hide} />
+          <ProjectEdit key={modalEditProject.opens} project={editedProject} show={modalEditProject.isOpen} onHide={modalEditProject.hide} />
         )}
       </div>
     </ProjectsContext.Provider>
