@@ -66,7 +66,7 @@ function Projects() {
             Developed by <a href="mailto:sa2rn.set@gmail.com">sa2rn.set@gmail.com</a>
           </p>
           <p>
-            <a href="#">Source code &gt;</a>
+            <a href="https://github.com/sa2rn/task-master">Source code &gt;</a>
           </p>
           <p>
             <Button size="lg" variant="primary" onClick={modalNewProject.show}>Create new project</Button>
