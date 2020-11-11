@@ -4,18 +4,20 @@ import { Button, Form, Modal } from 'react-bootstrap'
 import useForm from './useForm'
 import api from './api'
 import { TasksContext } from './Tasks'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // only for update
 function TaskEdit({ task, show, onHide }) {
   const [,fetchProject] = useContext(TasksContext)
-  const { errors, resetForm, getFieldProps, handleSubmit, isSubmitting } = useForm({
+  const { errors, values, setFieldValue, resetForm, getFieldProps, handleSubmit, isSubmitting } = useForm({
     initialValues: {
       ProjectId: task.project,
       title: task.title ?? '',
       description: task.description ?? '',
       status: task.status,
       priority: task.priority ?? '',
-      deadline: task.deadline ?? ''
+      deadline: task.deadline ? new Date(task.deadline) : ''
     },
     onSubmit: (values) => api.put(`tasks/${task.id}`, values),
     onSuccess: () => {
@@ -55,10 +57,13 @@ function TaskEdit({ task, show, onHide }) {
           </Form.Group>
           <Form.Group controlId="task.deadline">
             <Form.Label>Deadline</Form.Label>
-            <Form.Control {...getFieldProps('deadline')} type="text" min="0" max="10" />
-            <Form.Control.Feedback type="invalid">
-              {errors.deadline}
-            </Form.Control.Feedback>
+            <div>
+              <Form.Control isInvalid={!!errors.deadline} as={DatePicker} selected={values.deadline} onChange={(date) => setFieldValue('deadline', date)} />
+              <Form.Control.Feedback type="invalid" style={{display: errors.deadline ? 'block' : 'none'}}>
+                {errors.deadline}
+              </Form.Control.Feedback>
+            </div>
+            {/* <Form.Control {...getFieldProps('deadline')} type="text" min="0" max="10" /> */}
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
