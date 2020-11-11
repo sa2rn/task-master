@@ -21,10 +21,10 @@ async function findProject(req, res, next) {
 exports.list = async(req, res, next) => {
   try {
     const projects = await Project.findAll({
-      where: { UserId: req.user.id },
-      order: [
-        ['title', 'ASC']
-      ]
+      where: { UserId: req.user.id }
+      // order: [
+      //   ['title', 'ASC']
+      // ]
     })
 
     return res.json(projects)

@@ -1,19 +1,27 @@
 const { Task } = require('../models')
 const createError = require('http-errors')
 
+// TODO: add validation
 function createListQuery(req) {
   const dbQuery = {
     where: { UserId: req.user.id },
     order: []
   }
 
-  const { ProjectId, status } = req.query
+  const { ProjectId, status, orderBy, orderDir } = req.query
 
   if (ProjectId) {
     dbQuery.where.ProjectId = ProjectId
   }
   if (status) {
     dbQuery.where.status = status
+  }
+  if (orderBy) {
+    const order = [orderBy]
+    if (orderDir) {
+      order.push(orderDir)
+    }
+    dbQuery.order.push(order)
   }
 
   return dbQuery
