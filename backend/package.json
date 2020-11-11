@@ -1,5 +1,5 @@
 {
-  "name": "@task-manager/backend",
+  "name": "@task-master/backend",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",

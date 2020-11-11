@@ -1,5 +1,5 @@
 {
-  "name": "task-manager",
+  "name": "task-master",
   "version": "0.1.0",
   "main": "index.js",
   "author": "sa2rn.set@gmail.com",
@@ -10,11 +10,11 @@
     "frontend"
   ],
   "scripts": {
-    "backend:start": "yarn workspace @task-manager/backend run start",
-    "backend:dev": "yarn workspace @task-manager/backend run dev",
-    "backend:test": "yarn workspace @task-manager/backend run test",
-    "frontend:start": "yarn workspace @task-manager/frontend run start",
-    "frontend:build": "yarn workspace @task-manager/frontend run build",
+    "backend:start": "yarn workspace @task-master/backend run start",
+    "backend:dev": "yarn workspace @task-master/backend run dev",
+    "backend:test": "yarn workspace @task-master/backend run test",
+    "frontend:start": "yarn workspace @task-master/frontend run start",
+    "frontend:build": "yarn workspace @task-master/frontend run build",
     "dev": "concurrently \"yarn run backend:dev\" \"yarn run frontend:start\""
   },
   "devDependencies": {
