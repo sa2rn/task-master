@@ -6,3 +6,6 @@ yarn-error.log
 .env.prod
 .env.dev
 .env.test
+.git
+*/build
+*/node_modules

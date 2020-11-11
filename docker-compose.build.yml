@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    image: sa2rn/task-manager
+    env_file:
+      - .env.prod
+    ports:
+      - 3000:3000
