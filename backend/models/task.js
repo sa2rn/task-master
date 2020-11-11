@@ -50,8 +50,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Only allow value >= 0'
         },
         max: {
-          args: [55],
-          msg: 'Only allow value <= 55'
+          args: [10],
+          msg: 'Only allow value <= 10'
         }
       }
     },
