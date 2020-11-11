@@ -87,7 +87,7 @@ exports.create = async(req, res, next) => {
       description,
       priority,
       status,
-      deadline
+      deadline: deadline === '' ? null : deadline
     })
 
     return res.status(200).json(task)
@@ -109,7 +109,7 @@ exports.update = [
         description,
         priority,
         status,
-        deadline
+        deadline: deadline === '' ? null : deadline
       })
       await task.save()
 
