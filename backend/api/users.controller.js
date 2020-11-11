@@ -28,17 +28,21 @@ exports.update = async(req, res, next) => {
 
 const invalidLogin = { errors: { username: 'Invalid username or password' } }
 
-exports.login = async(req, res) => {
-  const { username, password } = req.body
+exports.login = async(req, res, next) => {
+  try {
+    const { username, password } = req.body
 
-  if (!username || !password) {
-    return res.status(400).json(invalidLogin)
+    if (!username || !password) {
+      return res.status(400).json(invalidLogin)
+    }
+
+    const user = await User.findOne({ where: { username } })
+    if (!user || !user.verifyPassword(password)) {
+      return res.status(400).json({ errors: { username: 'Invalid username or password' } })
+    }
+
+    res.json({ user: user, token: user.genToken() })
+  } catch (err) {
+    next(err)
   }
-
-  const user = await User.findOne({ where: { username } })
-  if (!user || !user.verifyPassword(password)) {
-    return res.status(400).json({ errors: { username: 'Invalid username or password' } })
-  }
-
-  res.json({ user: user, token: user.genToken() })
 }
