@@ -1,0 +1,53 @@
+.Projects-cardBody {
+  position: relative;
+  cursor: pointer;
+  padding-right: 50px;
+}
+
+.Projects-cardBody a {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  color: inherit;
+}
+
+.Projects-cardBody a > svg {
+  position: absolute;
+  right: 10px;
+  top: calc(50% - 0.5em);
+}
+
+.Projects-cardBody:hover {
+  color: rgb(158, 158, 158);
+}
+
+.Projects-cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Projects-cards > div {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 768px) {
+  .Projects-cards > div {
+    width: 50%;
+  }
+}
+
+@media (min-width: 992px) {
+  .Projects-cards > div {
+    width: 33.33333%;
+  }
+}
+
+.Projects-cards .card {
+  width: 100%
+}
