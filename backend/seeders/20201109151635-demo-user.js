@@ -32,8 +32,6 @@ module.exports = {
       'SELECT * from Projects;'
     )
 
-    console.log(users[0].id)
-
     await queryInterface.bulkInsert('Tasks', fakeArray((index) => {
       return {
         UserId: users[0].id,
