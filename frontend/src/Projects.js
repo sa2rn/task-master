@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { createContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Spinner, Card, Button, Jumbotron } from 'react-bootstrap'
 import { FaChevronRight } from 'react-icons/fa'
@@ -10,23 +9,6 @@ import useModal from './useModal'
 import './Projects.css'
 
 export const ProjectsContext = createContext()
-
-function DeleteProjectButton({ projectId }) {
-  const [,fetchProjects] = useContext(ProjectsContext)
-
-  async function handleClick() {
-    await api.delete(`projects/${projectId}`)
-    await fetchProjects()
-  }
-
-  return (
-    <Button onClick={handleClick} variant="outline-danger">Delete</Button>
-  )
-}
-
-DeleteProjectButton.propTypes = {
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-}
 
 function Projects() {
   const [projectsState, fetchProjects] = useFetch(() => api.get('projects'))
@@ -41,6 +23,15 @@ function Projects() {
   function editProject(data) {
     setEditedProject(data)
     modalEditProject.show()
+  }
+
+  async function deleteProject(data) {
+    try {
+      await api.delete(`projects/${data.id}`)
+      await fetchProjects()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const user = api.accessTokenPayload
@@ -58,7 +49,7 @@ function Projects() {
           </Card.Body>
           <Card.Footer>
             <Button variant="outline-primary" onClick={() => editProject(item)}>Edit</Button>{' '}
-            <DeleteProjectButton projectId={item.id} />
+            <Button onClick={() => deleteProject(item)} variant="outline-danger">Delete</Button>
           </Card.Footer>
         </Card>
       </div>
