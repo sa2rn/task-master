@@ -26,7 +26,19 @@ exports.update = async(req, res, next) => {
   }
 }
 
-exports.login = (req, res) => {
-  const { user } = req
+const invalidLogin = { errors: { username: 'Invalid username or password' } }
+
+exports.login = async(req, res) => {
+  const { username, password } = req.body
+
+  if (!username || !password) {
+    return res.status(400).json(invalidLogin)
+  }
+
+  const user = await User.findOne({ where: { username } })
+  if (!user || !user.verifyPassword(password)) {
+    return res.status(400).json({ errors: { username: 'Invalid username or password' } })
+  }
+
   res.json({ user: user, token: user.genToken() })
 }

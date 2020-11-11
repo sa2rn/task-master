@@ -96,7 +96,11 @@ describe('/api/users/*', function() {
           password: 'password'
         })
         .set('Accept', 'application/json')
-        .expect(401)
+        .expect(400, {
+          errors: {
+            username: 'Invalid username or password'
+          }
+        })
     })
   })
 })

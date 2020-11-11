@@ -1,6 +1,5 @@
 const path = require('path')
 require('dotenv').config({ path: path.join(__dirname, '../.env') })
-const { passport } = require('./secure')
 const express = require('express')
 const createError = require('http-errors')
 const morgan = require('morgan')
@@ -18,7 +17,6 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev'))
 app.use(bodyParser.json())
-app.use(passport.initialize())
 app.use('/api', api)
 if (process.env.NODE_ENV === 'production') {
   app.get('/*', (req, res) => {

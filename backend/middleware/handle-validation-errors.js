@@ -1,5 +1,5 @@
 module.exports = function handleValidationErrors(err, req, res, next) {
-  if (err.name === 'SequelizeValidationError') {
+  if (err.name === 'SequelizeValidationError' || err.status === 400) {
     const errors = {}
 
     for (const errItem of err.errors) {
