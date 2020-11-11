@@ -12,7 +12,7 @@ function TaskEdit({ task, show, onHide }) {
   const [,fetchProject] = useContext(TasksContext)
   const { errors, values, setFieldValue, resetForm, getFieldProps, handleSubmit, isSubmitting } = useForm({
     initialValues: {
-      ProjectId: task.project,
+      ProjectId: task.ProjectId,
       title: task.title ?? '',
       description: task.description ?? '',
       status: task.status,
