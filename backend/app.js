@@ -46,6 +46,6 @@ module.exports = app
 
 if (!module.parent) {
   app.listen(app.get('port'), () => {
-    console.log(`Listen on http://localhost:${app.get('port')}`)
+    console.log(`Listen on http://localhost:${app.get('port')} on ${process.env.NODE_ENV ?? 'development'} environment`)
   })
 }
