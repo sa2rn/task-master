@@ -68,6 +68,20 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
       }
+    },
+    isExpired: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        if (!this.deadline) return false
+        return this.deadline <= new Date()
+      }
+    },
+    daysLeft: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        if (!this.deadline) return Number.MAX_SAFE_INTEGER
+        return Math.ceil((this.deadline - new Date()) / 864e5)
+      }
     }
   }, {
     sequelize,

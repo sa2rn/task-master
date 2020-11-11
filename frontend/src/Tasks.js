@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { Button, Form, Spinner, Table } from 'react-bootstrap'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
+import clsx from 'clsx';
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
 import api from './api'
 import QuickCreateTask from './QuickCreateTask'
@@ -31,11 +32,21 @@ function Tasks() {
   }
 
   async function doneTask(data) {
-    await api.put(`tasks/${data.id}`, {
-      ...data,
-      status: 'done'
-    })
-    await fetchProject()
+    try {
+      await api.put(`tasks/${data.id}`, { ...data, status: 'done' })
+      await fetchProject()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function deleteTask(data) {
+    try {
+      await api.delete(`tasks/${data.id}`)
+      await fetchProject()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   if (!state.result && state.status === 'pending') {
@@ -53,7 +64,7 @@ function Tasks() {
 
   function renderTasks() {
     return state.result.tasks.map(item => (
-      <tr key={item.id}>
+      <tr key={item.id} className={clsx({'table-danger': item.isExpired, 'table-warning': item.daysLeft <= 3 })}>
         <th scope="row">
           <Form.Check onChange={() => doneTask(item)} aria-label="Done" />
         </th>
@@ -61,11 +72,14 @@ function Tasks() {
           {item.title}
         </td>
         <td>
+          {item.priority}
+        </td>
+        <td>
           <div className="d-flex">
             <Button onClick={() => editTask(item)} variant="link" size="sm">
               <BsPencilSquare />
             </Button>
-            <Button variant="link" size="sm">
+            <Button onClick={() => deleteTask(item)} variant="link" size="sm">
               <BsFillTrashFill />
             </Button>
           </div>
@@ -82,8 +96,14 @@ function Tasks() {
         <p>
           Fill the form to create new task
         </p>
-        <QuickCreateTask projectId={projectId} />
         <Table hover responsive>
+          <thead className="thead-light">
+            <tr>
+              <th scope="col" colSpan="4">
+                <QuickCreateTask projectId={projectId} />
+              </th>
+            </tr>
+          </thead>
           <tbody>
             {state.result?.tasks && renderTasks()}
           </tbody>

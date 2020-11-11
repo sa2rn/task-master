@@ -58,12 +58,17 @@ function TaskEdit({ task, show, onHide }) {
           <Form.Group controlId="task.deadline">
             <Form.Label>Deadline</Form.Label>
             <div>
-              <Form.Control isInvalid={!!errors.deadline} as={DatePicker} selected={values.deadline} onChange={(date) => setFieldValue('deadline', date)} />
+              <Form.Control
+                isInvalid={!!errors.deadline}
+                as={DatePicker}
+                selected={values.deadline}
+                onChange={(date) => setFieldValue('deadline', date)}
+                autoComplete="off"
+              />
               <Form.Control.Feedback type="invalid" style={{display: errors.deadline ? 'block' : 'none'}}>
                 {errors.deadline}
               </Form.Control.Feedback>
             </div>
-            {/* <Form.Control {...getFieldProps('deadline')} type="text" min="0" max="10" /> */}
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

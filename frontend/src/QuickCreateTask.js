@@ -20,14 +20,14 @@ function QuickCreateTask({ projectId }) {
   })
 
   return (
-    <Form className="mb-4" onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       <InputGroup size="lg">
         <Form.Control {...getFieldProps('title')} type="text" placeholder="Enter title" />
         <InputGroup.Append>
           <Button disabled={isSubmitting} type="submit" variant="primary">Create</Button>
         </InputGroup.Append>
       </InputGroup>
-      <Form.Control.Feedback type="invalid">
+      <Form.Control.Feedback type="invalid" style={{ display: errors.title ? 'block' : 'none' }}>
         {errors.title}
       </Form.Control.Feedback>
     </Form>
