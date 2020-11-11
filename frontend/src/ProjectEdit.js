@@ -5,6 +5,7 @@ import useForm from './useForm'
 import api from './api'
 import { ProjectsContext } from './Projects'
 
+// for update and create
 function ProjectEdit({ project, show, onHide }) {
   const [, fetchProjects] = useContext(ProjectsContext)
   const { errors, resetForm, getFieldProps, handleSubmit, isSubmitting } = useForm({

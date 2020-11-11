@@ -1,23 +1,34 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useReducer } from 'react'
 
-export default function useModal() {
-  const [isOpen, setIsOpen] = useState(false)
+const initialState = { isOpen: false, opens: 0 }
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'openModal':
+      return { ...state, isOpen: true, opens: state.opens + 1 }
+    case 'closeModal':
+      return { ...state, isOpen: false }
+    case 'toggleModal':
+      return { ...state, isOpen: !state.isOpen, opens: state.opens + (state.isOpen ? 0 : 1) }
+    default:
+      throw new Error();
+  }
+}
+
+export default function useModal(isOpen = false) {
+  const [state, dispatch] = useReducer(reducer, { ...initialState, isOpen })
 
   const show = useCallback(() => {
-    setIsOpen(true)
+    dispatch({ type: 'openModal' })
   }, [])
 
   const hide = useCallback(() => {
-    setIsOpen(false)
+    dispatch({ type: 'closeModal' })
   }, [])
 
-  const toggle = useCallback((v) => {
-    if (typeof v === 'boolean') {
-      setIsOpen(v)
-    } else {
-      setIsOpen(prev => !prev)
-    }
+  const toggle = useCallback(() => {
+    dispatch({ type: 'toggleModal' })
   }, [])
 
-  return { isOpen, show, hide, toggle }
+  return { ...state, show, hide, toggle }
 }

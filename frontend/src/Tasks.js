@@ -89,7 +89,7 @@ function Tasks() {
           </tbody>
         </Table>
         {editedTask && (
-          <TaskEdit key={editedTask} task={editedTask} show={modalEditTask.isOpen} onHide={modalEditTask.hide} />
+          <TaskEdit key={modalEditTask.opens} task={editedTask} show={modalEditTask.isOpen} onHide={modalEditTask.hide} />
         )}
       </div>
     </TasksContext.Provider>

@@ -5,16 +5,17 @@ import useForm from './useForm'
 import api from './api'
 import { TasksContext } from './Tasks'
 
+// only for update
 function TaskEdit({ task, show, onHide }) {
   const [,fetchProject] = useContext(TasksContext)
   const { errors, resetForm, getFieldProps, handleSubmit, isSubmitting } = useForm({
     initialValues: {
-      ProjectId: task?.project,
-      title: task?.title ?? '',
-      description: task?.description ?? '',
-      status: task?.status,
-      priority: task?.priority ?? '',
-      deadline: task?.deadline ?? ''
+      ProjectId: task.project,
+      title: task.title ?? '',
+      description: task.description ?? '',
+      status: task.status,
+      priority: task.priority ?? '',
+      deadline: task.deadline ?? ''
     },
     onSubmit: (values) => api.put(`tasks/${task.id}`, values),
     onSuccess: () => {
@@ -28,7 +29,7 @@ function TaskEdit({ task, show, onHide }) {
     <Modal show={show} onHide={onHide}>
       <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
-          <Modal.Title>{`Edit task ${task?.task}`}</Modal.Title>
+          <Modal.Title>{`Edit task ${task.title}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="task.username">
@@ -72,7 +73,7 @@ function TaskEdit({ task, show, onHide }) {
 TaskEdit.propTypes = {
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  task: PropTypes.object
+  task: PropTypes.object.isRequired
 }
 
 export default TaskEdit
