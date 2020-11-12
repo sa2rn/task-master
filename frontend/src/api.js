@@ -5,26 +5,6 @@ function isJson(res) {
   return /^application\/json/.test(contentType)
 }
 
-async function assertIsOk(res) {
-  if (res.status === 400 && isJson(res)) {
-    const { errors } = await res.json()
-    const err = new Error('Validation error')
-    err.name = 'ValidationError'
-    err.errors = errors
-    err.status = res.status
-    throw err
-  } else if (!res.ok || res.status >= 400) {
-    const err = new Error(res.statusMessage)
-    err.name = 'ApiError'
-    err.status = res.status
-    throw err
-  }
-}
-
-function produceData(res) {
-  return isJson(res) ? res.json() : res.body()
-}
-
 export class Api {
   constructor({ base = '', headers = {} }) {
     this._base = base
@@ -51,7 +31,38 @@ export class Api {
   }
 
   get accessTokenPayload() {
-    return jwtDecode(this.accessToken)
+    try {
+      return jwtDecode(this.accessToken)
+    } catch (err) {
+      return null
+    }
+  }
+
+  async handleResponse(res) {
+    if (res.status === 401) {
+      const err = new Error(res.statusMessage)
+      err.name = 'UnauthorizedError'
+      err.status = res.status
+      throw err
+    } else if (res.status === 400 && isJson(res)) {
+      const { errors } = await res.json()
+      const err = new Error('Validation error')
+      err.name = 'ValidationError'
+      err.errors = errors
+      err.status = res.status
+      throw err
+    } else if (!res.ok || res.status >= 400) {
+      const err = new Error(res.statusMessage)
+      err.name = 'ApiError'
+      err.status = res.status
+      throw err
+    }
+
+    if (res.status === 203) return
+
+    const data = isJson(res) ? await res.json() : await res.body()
+
+    return data
   }
 
   async get(url) {
@@ -60,10 +71,7 @@ export class Api {
       headers: this.headers
     })
 
-    await assertIsOk(res)
-    const data = await produceData(res)
-
-    return data
+    return this.handleResponse(res)
   }
 
   async post(url, body) {
@@ -73,10 +81,7 @@ export class Api {
       headers: this.headers
     })
 
-    await assertIsOk(res)
-    const data = await produceData(res)
-
-    return data
+    return this.handleResponse(res)
   }
 
   async put(url, body) {
@@ -86,10 +91,7 @@ export class Api {
       headers: this.headers
     })
 
-    await assertIsOk(res)
-    const data = await produceData(res)
-
-    return data
+    return this.handleResponse(res)
   }
 
   async delete(url) {
@@ -98,7 +100,7 @@ export class Api {
       headers: this.headers
     })
 
-    await assertIsOk(res)
+    return this.handleResponse(res)
   }
 }
 

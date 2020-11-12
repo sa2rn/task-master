@@ -1,5 +1,5 @@
 const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '../.env') })
+require('dotenv').config({ path: path.join(__dirname, '../', require('./utils/env-filename')) })
 const express = require('express')
 const createError = require('http-errors')
 const morgan = require('morgan')
@@ -9,7 +9,7 @@ const logErrors = require('./middleware/log-errors')
 const handleValidationErrors = require('./middleware/handle-validation-errors')
 
 const app = express()
-app.set('port', parseInt(process.env.PORT || 3001))
+app.set('port', parseInt(process.env.PORT || 3000))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')))
