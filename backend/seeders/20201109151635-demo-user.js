@@ -9,7 +9,7 @@ module.exports = {
   up: async(queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Users', [{
       username: 'demo',
-      password: crypt.hashPassword('password'),
+      passwordHash: crypt.hashPassword('password'),
       createdAt: new Date(),
       updatedAt: new Date()
     }], {})
@@ -45,6 +45,8 @@ module.exports = {
   },
 
   down: async(queryInterface, Sequelize) => {
+    await queryInterface.bulkDelete('Tasks', null, {})
+    await queryInterface.bulkDelete('Projects', null, {})
     await queryInterface.bulkDelete('Users', null, {})
   }
 }

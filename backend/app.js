@@ -1,5 +1,5 @@
+require('./init')
 const path = require('path')
-require('dotenv').config({ path: path.join(__dirname, '../', require('./utils/env-filename')) })
 const express = require('express')
 const createError = require('http-errors')
 const morgan = require('morgan')

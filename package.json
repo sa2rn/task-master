@@ -15,7 +15,8 @@
     "backend:test": "yarn workspace @task-master/backend run test",
     "frontend:start": "yarn workspace @task-master/frontend run start",
     "frontend:build": "yarn workspace @task-master/frontend run build",
-    "dev": "concurrently \"yarn run backend:dev\" \"yarn run frontend:start\""
+    "dev": "concurrently \"yarn run backend:dev\" \"yarn run frontend:start\"",
+    "orm": "yarn workspace @task-master/backend run sequelize"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
