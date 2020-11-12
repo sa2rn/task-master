@@ -4,6 +4,7 @@ const express = require('express')
 const createError = require('http-errors')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const compression = require('compression')
 const api = require('./api')
 const logErrors = require('./middleware/log-errors')
 const handleValidationErrors = require('./middleware/handle-validation-errors')
@@ -12,6 +13,7 @@ const app = express()
 app.set('port', parseInt(process.env.PORT || 3000))
 
 if (process.env.NODE_ENV === 'production') {
+  app.use(compression())
   app.use(express.static(path.join(__dirname, '../frontend/build')))
 }
 
