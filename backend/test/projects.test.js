@@ -51,7 +51,9 @@ describe('/api/projects/*', function() {
           assert.equal(response.body.length, 1)
         })
     })
+  })
 
+  describe('POST /api/projects', function() {
     it('create project', async function() {
       await request(app)
         .post('/api/projects')
@@ -69,7 +71,9 @@ describe('/api/projects/*', function() {
           assert.property(response.body, 'createdAt')
         })
     })
+  })
 
+  describe('GET /api/projects/:projectId', function() {
     it('retrieve project', async function() {
       const project = await Project.create({ UserId: users[0].id, title: 'Project one' })
 
@@ -86,7 +90,7 @@ describe('/api/projects/*', function() {
         })
     })
 
-    it('try retrieve project from another user', async function() {
+    it('try to retrieve project from another user', async function() {
       const project = await Project.create({ UserId: users[1].id, title: 'Project one' })
 
       await request(app)
@@ -95,7 +99,9 @@ describe('/api/projects/*', function() {
         .set('Accept', 'application/json')
         .expect(404)
     })
+  })
 
+  describe('PUT /api/projects/:projectId', function() {
     it('update project', async function() {
       const project = await Project.create({
         UserId: users[0].id,
@@ -116,7 +122,9 @@ describe('/api/projects/*', function() {
           assert.notProperty(response.body, 'description')
         })
     })
+  })
 
+  describe('DELETE /api/projects/:projectId', function() {
     it('delete project', async function() {
       const project = await Project.create({
         UserId: users[0].id,

@@ -82,7 +82,9 @@ describe('/api/tasks/*', function() {
           assert.propertyVal(response.body[0], 'id', tasks[0].id)
         })
     })
+  })
 
+  describe('POST /api/tasks', function() {
     it('create task', async function() {
       await request(app)
         .post('/api/tasks')
@@ -124,7 +126,9 @@ describe('/api/tasks/*', function() {
           }
         })
     })
+  })
 
+  describe('GET /api/tasks/:taskId', function() {
     it('retrieve task', async function() {
       const task = await Task.create({ UserId: users[0].id, ProjectId: projects[0].id, title: 'Task one' })
 
@@ -143,7 +147,9 @@ describe('/api/tasks/*', function() {
           assert.property(response.body, 'createdAt')
         })
     })
+  })
 
+  describe('PUT /api/tasks/:taskId', function() {
     it('update task', async function() {
       const task = await Task.create({ UserId: users[0].id, ProjectId: projects[0].id, title: 'Task one' })
 
@@ -168,7 +174,9 @@ describe('/api/tasks/*', function() {
           assert.property(response.body, 'createdAt')
         })
     })
+  })
 
+  describe('DELETE /api/tasks/:taskId', function() {
     it('delete task', async function() {
       const task = await Task.create({ UserId: users[0].id, ProjectId: projects[0].id, title: 'Task one' })
 
@@ -183,7 +191,7 @@ describe('/api/tasks/*', function() {
       assert.equal(count, 0)
     })
 
-    it('delete not my task', async function() {
+    it('try to delete not my task', async function() {
       const task = await Task.create({ UserId: users[1].id, ProjectId: projects[3].id, title: 'Task one' })
 
       await request(app)
