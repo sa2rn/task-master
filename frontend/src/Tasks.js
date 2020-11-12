@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { Button, Form, Spinner, Table } from 'react-bootstrap'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
-import clsx from 'clsx';
+import clsx from 'clsx'
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
 import api from './api'
 import QuickCreateTask from './QuickCreateTask'

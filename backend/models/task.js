@@ -64,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         isFutureDate(value) {
           if (value <= new Date()) {
-            throw new Error("Deadline can't be less than the current date")
+            throw new Error('Deadline can\'t be less than the current date')
           }
         }
       }

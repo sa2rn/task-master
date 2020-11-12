@@ -6,7 +6,7 @@ import useForm from './useForm'
 import api from './api'
 
 function Register() {
-  const { getFieldProps, isSuccessfullySubmitted, isSubmitting, errors, handleSubmit } = useForm({
+  const { getFieldProps, isSubmitting, errors, handleSubmit } = useForm({
     initialValues: {
       username: '',
       password: '',

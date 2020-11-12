@@ -120,7 +120,7 @@ describe('/api/tasks/*', function() {
         .expect(400, {
           errors: {
             title: 'Allow value with length between 3 and 100',
-            status: "Only allow 'new' or 'done'",
+            status: 'Only allow \'new\' or \'done\'',
             priority: 'Only allow value >= 0',
             deadline: 'Only allow date'
           }

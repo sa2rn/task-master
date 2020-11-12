@@ -17,8 +17,7 @@ exports.aboutMe = async(req, res, next) => {
 exports.update = async(req, res, next) => {
   try {
     const { user, body: { username, password } } = req
-    user.username = username
-    user.password = password
+    user.set({ username, password })
     await user.save()
     res.json(user)
   } catch (err) {
@@ -26,19 +25,19 @@ exports.update = async(req, res, next) => {
   }
 }
 
-const invalidLogin = { errors: { username: 'Invalid username or password' } }
-
 exports.login = async(req, res, next) => {
   try {
     const { username, password } = req.body
 
+    const fail = () => res.status(400).json({ errors: { username: 'Invalid username or password' } })
+
     if (!username || !password) {
-      return res.status(400).json(invalidLogin)
+      return fail()
     }
 
     const user = await User.findOne({ where: { username } })
     if (!user || !user.verifyPassword(password)) {
-      return res.status(400).json({ errors: { username: 'Invalid username or password' } })
+      return fail()
     }
 
     res.json({ user: user, token: user.genToken() })

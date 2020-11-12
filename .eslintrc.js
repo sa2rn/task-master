@@ -6,11 +6,16 @@ module.exports = {
     mocha: true
   },
   extends: [
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
+    'eslint:recommended',
     'plugin:mocha/recommended',
-    'standard'
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended'
   ],
+  settings: {
+    react: {
+      version: '17.0.1'
+    }
+  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true
@@ -20,6 +25,9 @@ module.exports = {
   },
   plugins: [],
   rules: {
-    'space-before-function-paren': ['error', 'never']
+    'space-before-function-paren': ['error', 'never'],
+    'no-unused-vars': 'warn',
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'never']
   }
 }
