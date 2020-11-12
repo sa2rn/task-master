@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form, Modal } from 'react-bootstrap'
+import isLength from 'validator/lib/isLength'
 import useForm from './useForm'
 import api from './api'
 import { ProjectsContext } from './Projects'
@@ -24,6 +25,13 @@ function ProjectEdit({ project, show, onHide }) {
       fetchProjects()
       onHide()
       resetForm()
+    },
+    validate: (values) => {
+      const errors = {}
+      if (!isLength(values.title, { min: 3, max: 100 })) {
+        errors.title = 'Allow value with length between 3 and 100'
+      }
+      return errors
     }
   })
 

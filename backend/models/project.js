@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: {
           args: [3, 100],
-          msg: 'Allow with length between 3 and 100'
+          msg: 'Allow value with length between 3 and 100'
         }
       }
     },

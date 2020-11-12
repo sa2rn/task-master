@@ -1,6 +1,7 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { Form, Button, Container } from 'react-bootstrap'
+import isLength from 'validator/lib/isLength'
 import useForm from './useForm'
 import api from './api'
 
@@ -8,12 +9,26 @@ function Register() {
   const { getFieldProps, isSuccessfullySubmitted, isSubmitting, errors, handleSubmit } = useForm({
     initialValues: {
       username: '',
-      password: ''
+      password: '',
+      repeatPassword: ''
     },
     onSubmit: async (values) => {
-      const { token } = await api.post('users/register', values)
+      const { token } = await api.post('users/register', { username: values.username, password: values.password })
       api.accessToken = token
     },
+    validate: (values) => {
+      const errors = {}
+      if (!isLength(values.username, { min: 3, max: 100 })) {
+        errors.username = 'Allow value with length between 3 and 100'
+      }
+      if (!isLength(values.password, { min: 5, max: 100 })) {
+        errors.password = 'Allow value with length between 5 and 100'
+      }
+      if (!errors.password && values.password !== values.repeatPassword) {
+        errors.password = 'Passwords Must be identical'
+      }
+      return errors
+    }
   })
 
   if (api.accessToken) {
@@ -38,14 +53,22 @@ function Register() {
           </Form.Group>
           <Form.Group controlId="password">
             <Form.Label>Password</Form.Label>
-            <Form.Control {...getFieldProps('password')} size="lg" type="password" placeholder="Enter Password" />
+            <Form.Control {...getFieldProps('password')} size="lg" type="password" placeholder="Enter password" />
             <Form.Control.Feedback type="invalid">
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
-          <Button size="lg" block disabled={isSubmitting} variant="primary" type="submit">
+          <Form.Group controlId="repeatPassword">
+            <Form.Label>Repeat password</Form.Label>
+            <Form.Control {...getFieldProps('repeatPassword')} size="lg" type="password" placeholder="Repeat password" />
+            <Form.Control.Feedback type="invalid">
+              {errors.repeatPassword}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Button className="mb-4" size="lg" block disabled={isSubmitting} variant="primary" type="submit">
             Sign up
           </Button>
+          <p className="text-center">If you are registered <Link to="/login">Sign in</Link></p>
         </Form>
       </Container>
     </div>

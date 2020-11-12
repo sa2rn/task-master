@@ -1,11 +1,13 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form, Modal } from 'react-bootstrap'
+import isLength from 'validator/lib/isLength'
+import isDate from 'validator/lib/isDate'
 import useForm from './useForm'
 import api from './api'
 import { TasksContext } from './Tasks'
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 // only for update
 function TaskEdit({ task, show, onHide }) {
@@ -24,6 +26,19 @@ function TaskEdit({ task, show, onHide }) {
       onHide()
       resetForm()
       fetchProject()
+    },
+    validate: (values) => {
+      const errors = {}
+      if (!isLength(values.title, { min: 3, max: 100 })) {
+        errors.title = 'Allow value with length between 3 and 100'
+      }
+      if (values.deadline && !isDate(values.deadline)) {
+        errors.deadline = 'Only allow date'
+      }
+      if (values.deadline && isDate(values.deadline) && values.deadline <= new Date() ) {
+        errors.deadline = "Deadline can't be less than the current date"
+      }
+      return errors
     }
   })
 

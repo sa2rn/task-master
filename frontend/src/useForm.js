@@ -91,10 +91,14 @@ export default function useForm({ initialValues, onSuccess, validate, onSubmit }
   function isValid() {
     if (!validate) return true
 
-    const errors = validate(state.values)
-    setErrors(errors)
+    const errors = validate(state.values) || {}
+    const hasErrors = Object.keys(errors).length > 0
 
-    return Object.keys(errors).length === 0
+    if (hasErrors) {
+      setErrors(errors)
+    }
+
+    return !hasErrors
   }
 
   async function handleSubmit(e) {

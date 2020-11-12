@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form, InputGroup } from 'react-bootstrap'
+import isLength from 'validator/lib/isLength'
 import api from './api'
 import useForm from './useForm'
 import { TasksContext } from './Tasks'
@@ -16,6 +17,13 @@ function QuickCreateTask({ projectId }) {
     onSuccess: () => {
       resetForm()
       fetchProject()
+    },
+    validate: (values) => {
+      const errors = {}
+      if (!isLength(values.title, { min: 3, max: 100 })) {
+        errors.title = 'Allow value with length between 3 and 100'
+      }
+      return errors
     }
   })
 

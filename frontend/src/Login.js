@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router'
 import { Form, Button, Container } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import useForm from './useForm'
 import api from './api'
 
@@ -44,9 +45,10 @@ function Login() {
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
-          <Button size="lg" block disabled={isSubmitting} variant="primary" type="submit">
+          <Button className="mb-4" size="lg" block disabled={isSubmitting} variant="primary" type="submit">
             Sign in
           </Button>
+          <p className="text-center">If you are not registered <Link to="/register">Sign up</Link></p>
         </Form>
       </Container>
     </div>
