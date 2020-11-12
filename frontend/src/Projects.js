@@ -60,7 +60,7 @@ function Projects() {
     <ProjectsContext.Provider value={[projectsState, fetchProjects]}>
       <div>
         <Jumbotron>
-          <h1>Hello, {user.username}!</h1>
+          <h1>Hello, {user?.username}!</h1>
           <p>
             This is a simple task manager.
             Developed by <a href="mailto:sa2rn.set@gmail.com">sa2rn.set@gmail.com</a>
