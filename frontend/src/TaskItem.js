@@ -3,7 +3,15 @@ import PropTypes from 'prop-types'
 import { Button, Form} from 'react-bootstrap'
 import clsx from 'clsx'
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
-import { formatDistanceStrict } from 'date-fns'
+import { formatDistanceStrict, parseISO } from 'date-fns'
+
+function formatDaysLeft(deadline) {
+  if (typeof deadline === 'string') {
+    deadline = parseISO(deadline)
+  }
+
+  return formatDistanceStrict(deadline, new Date(), { addSuffix: true, unit: 'day', roundingMethod: 'ceil' })
+}
 
 function TaskItem({ task, onCheck, onEdit, onDelete }) {
   const handleCheckChange = (e) => onCheck(task, e.target.checked ? 'done' : 'new')
@@ -28,7 +36,7 @@ function TaskItem({ task, onCheck, onEdit, onDelete }) {
             'badge-danger': task.daysLeft <= 0
           })}
         >
-          {formatDistanceStrict(new Date(), task.deadline, { addSuffix: true, unit: 'd', partialMethod: 'ceil' })}
+          {formatDaysLeft(task.deadline)}
         </span>
       )}
     </td>
