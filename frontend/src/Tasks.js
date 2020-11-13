@@ -1,14 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { Button, Form, Spinner, Table } from 'react-bootstrap'
+import { Spinner, Table } from 'react-bootstrap'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
-import clsx from 'clsx'
-import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
 import api from './api'
 import QuickCreateTask from './QuickCreateTask'
 import useFetch from './useFetch'
 import useModal from './useModal'
 import TaskEdit from './TaskEdit'
+import TaskItem from './TaskItem'
 
 export const TasksContext = createContext()
 
@@ -17,7 +16,7 @@ function Tasks() {
   const modalEditTask = useModal()
   const [state, fetchProject] = useFetch(async() => {
     const project = await api.get(`projects/${projectId}`)
-    const tasks = await api.get(`tasks?ProjectId=${projectId}&status=new&orderBy=priority&orderDir=DESC`)
+    const tasks = await api.get(`tasks?ProjectId=${projectId}&orderBy=priority&orderDir=DESC`)
     return { project, tasks }
   })
   const [editedTask, setEditedTask] = useState(null)
@@ -31,9 +30,9 @@ function Tasks() {
     modalEditTask.show()
   }
 
-  async function doneTask(data) {
+  async function changeTaskStatus(data, status) {
     try {
-      await api.put(`tasks/${data.id}`, { ...data, status: 'done' })
+      await api.put(`tasks/${data.id}`, { ...data, status })
       await fetchProject()
     } catch (err) {
       console.error(err)
@@ -62,32 +61,6 @@ function Tasks() {
     )
   }
 
-  function renderTasks() {
-    return state.result.tasks.map(item => (
-      <tr key={item.id} className={clsx({'table-danger': item.isExpired, 'table-warning': item.daysLeft <= 3 })}>
-        <th scope="row">
-          <Form.Check onChange={() => doneTask(item)} aria-label="Done" />
-        </th>
-        <td width="100%">
-          {item.title}
-        </td>
-        <td>
-          {item.priority}
-        </td>
-        <td>
-          <div className="d-flex">
-            <Button onClick={() => editTask(item)} variant="link" size="sm">
-              <BsPencilSquare />
-            </Button>
-            <Button onClick={() => deleteTask(item)} variant="link" size="sm">
-              <BsFillTrashFill />
-            </Button>
-          </div>
-        </td>
-      </tr>
-    ))
-  }
-
   return (
     <TasksContext.Provider value={[state, fetchProject]}>
       <div>
@@ -105,7 +78,9 @@ function Tasks() {
             </tr>
           </thead>
           <tbody>
-            {state.result?.tasks && renderTasks()}
+            {state.result?.tasks && state.result.tasks.map(item =>
+              <TaskItem key={item.id} task={item} onCheck={changeTaskStatus} onEdit={editTask} onDelete={deleteTask} />
+            )}
           </tbody>
         </Table>
         {editedTask && (
