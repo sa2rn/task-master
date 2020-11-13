@@ -3,20 +3,28 @@ import PropTypes from 'prop-types'
 import { Button, Form} from 'react-bootstrap'
 import clsx from 'clsx'
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
-import { formatDistanceStrict, parseISO } from 'date-fns'
+import { formatDistanceStrict, parseISO, differenceInHours } from 'date-fns'
 
-function formatDaysLeft(deadline) {
-  if (typeof deadline === 'string') {
-    deadline = parseISO(deadline)
+function convertToDate(date) {
+  if (!date) return null
+  return typeof date === 'string' ? parseISO(date) : date
+}
+
+function getBadgeColors(deadline) {
+  const days = Math.ceil(differenceInHours(deadline, new Date())/24)|0
+
+  return {
+    'badge-secondary': days > 3,
+    'badge-warning': days >= 1 && days <= 3,
+    'badge-danger': days <= 0
   }
-
-  return formatDistanceStrict(deadline, new Date(), { addSuffix: true, unit: 'day', roundingMethod: 'ceil' })
 }
 
 function TaskItem({ task, onCheck, onEdit, onDelete }) {
   const handleCheckChange = (e) => onCheck(task, e.target.checked ? 'done' : 'new')
   const handleEditClick = () => onEdit(task)
   const handleDeleteClick = () => onDelete(task)
+  const deadlineDate = convertToDate(task.deadline)
 
   return (
     <tr key={task.id}>
@@ -28,15 +36,11 @@ function TaskItem({ task, onCheck, onEdit, onDelete }) {
     </th>
     <td width="100%">
       {task.title}
-      {task.deadline && (
+      {deadlineDate && (
         <span
-          className={clsx('ml-1 badge', {
-            'badge-secondary': task.daysLeft > 3,
-            'badge-warning': task.daysLeft >= 1 && task.daysLeft <= 3,
-            'badge-danger': task.daysLeft <= 0
-          })}
+          className={clsx('ml-1 badge', getBadgeColors(deadlineDate))}
         >
-          {formatDaysLeft(task.deadline)}
+          {formatDistanceStrict(deadlineDate, new Date(), { addSuffix: true, unit: 'day', roundingMethod: 'ceil' })}
         </span>
       )}
     </td>

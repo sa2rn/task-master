@@ -69,6 +69,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    // TODO: remove deprecated
     isExpired: {
       type: DataTypes.VIRTUAL,
       get() {
@@ -76,6 +77,7 @@ module.exports = (sequelize, DataTypes) => {
         return this.deadline <= new Date()
       }
     },
+    // TODO: remove deprecated
     daysLeft: {
       type: DataTypes.VIRTUAL,
       get() {
