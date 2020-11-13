@@ -12,7 +12,7 @@ function Register() {
       password: '',
       repeatPassword: ''
     },
-    onSubmit: async (values) => {
+    onSubmit: async(values) => {
       const { token } = await api.post('users/register', { username: values.username, password: values.password })
       api.accessToken = token
     },

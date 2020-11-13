@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer } from 'react'
 
 function reducer(state, action) {
   switch (action.type) {
@@ -53,7 +53,7 @@ function reducer(state, action) {
       return action.newState
     }
     default:
-      throw new Error();
+      throw new Error()
   }
 }
 
@@ -65,14 +65,14 @@ export default function useForm({ initialValues, onSuccess, validate, onSubmit }
     initialValues,
     errors: {}
   }
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   function setFieldValue(name, value) {
     dispatch({ type: 'setFieldValue', name, value })
   }
 
   function handleChange(e) {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFieldValue(name, value)
   }
 

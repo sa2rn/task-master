@@ -14,7 +14,7 @@ function ProjectEdit({ project, show, onHide }) {
       title: project?.title ?? '',
       description: project?.description ?? ''
     },
-    onSubmit: async (values) => {
+    onSubmit: async(values) => {
       if (project) {
         await api.put(`projects/${project.id}`, values)
       } else {

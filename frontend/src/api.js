@@ -40,7 +40,7 @@ export class Api {
 
   async handleResponse(res) {
     if (res.status === 401) {
-      const err = new Error(res.statusMessage)
+      const err = new Error('Unauthorized')
       err.name = 'UnauthorizedError'
       err.status = res.status
       throw err

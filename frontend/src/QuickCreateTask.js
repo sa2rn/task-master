@@ -13,7 +13,7 @@ function QuickCreateTask({ projectId }) {
       title: '',
       ProjectId: projectId
     },
-    onSubmit: (values) => api.post(`tasks`, values),
+    onSubmit: (values) => api.post('tasks', values),
     onSuccess: () => {
       resetForm()
       fetchProject()

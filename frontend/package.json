@@ -34,7 +34,14 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "space-before-function-paren": ["error", "never"],
+      "no-unused-vars": "warn",
+      "quotes": ["error", "single"],
+      "semi": ["error", "never"],
+      "react/prop-types": ["error", { "ignore": ["children"] }]
+    }
   },
   "browserslist": {
     "production": [

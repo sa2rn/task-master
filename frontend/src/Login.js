@@ -11,7 +11,7 @@ function Login() {
       username: '',
       password: ''
     },
-    onSubmit: async (values) => {
+    onSubmit: async(values) => {
       const { token } = await api.post('users/login', values)
       api.accessToken = token
     },

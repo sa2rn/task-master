@@ -27,25 +27,25 @@ function reducer(state, action) {
       return {
         ...state,
         status: 'rejected',
-        error: null
+        error: action.error
       }
     default:
-      throw new Error();
+      throw new Error()
   }
 }
 
 export default function useFetch(asyncFunc, deps = []) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
   const mountedRef = useRef(false)
 
   useEffect(() => {
-    mountedRef.current = true;
+    mountedRef.current = true
     return () => {
-      mountedRef.current = false;
-    };
-  });
+      mountedRef.current = false
+    }
+  })
 
-  const run = useCallback(async (...args) => {
+  const run = useCallback(async(...args) => {
     try {
       dispatch({ type: 'fetchStart' })
       const result = await asyncFunc(...args)

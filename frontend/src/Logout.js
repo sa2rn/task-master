@@ -7,7 +7,7 @@ function Logout() {
     api.accessToken = null
   }, [])
 
-  return <Redirect to="/" />;
+  return <Redirect to="/" />
 }
 
 export default Logout

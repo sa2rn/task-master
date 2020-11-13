@@ -36,7 +36,7 @@ function TaskEdit({ task, show, onHide }) {
         errors.deadline = 'Only allow date'
       }
       if (values.deadline && isDate(values.deadline) && values.deadline <= new Date() ) {
-        errors.deadline = "Deadline can't be less than the current date"
+        errors.deadline = 'Deadline can\'t be less than the current date'
       }
       return errors
     }

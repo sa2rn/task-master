@@ -15,7 +15,7 @@ export const TasksContext = createContext()
 function Tasks() {
   const { projectId } = useParams()
   const modalEditTask = useModal()
-  const [state, fetchProject] = useFetch(async () => {
+  const [state, fetchProject] = useFetch(async() => {
     const project = await api.get(`projects/${projectId}`)
     const tasks = await api.get(`tasks?ProjectId=${projectId}&status=new&orderBy=priority&orderDir=DESC`)
     return { project, tasks }

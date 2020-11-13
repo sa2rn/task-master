@@ -11,7 +11,7 @@ function reducer(state, action) {
     case 'toggleModal':
       return { ...state, isOpen: !state.isOpen, opens: state.opens + (state.isOpen ? 0 : 1) }
     default:
-      throw new Error();
+      throw new Error()
   }
 }
 
