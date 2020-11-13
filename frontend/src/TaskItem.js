@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Button, Form} from 'react-bootstrap'
 import clsx from 'clsx'
 import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs'
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict'
+import { formatDistanceStrict } from 'date-fns'
 
 function TaskItem({ task, onCheck, onEdit, onDelete }) {
   const handleCheckChange = (e) => onCheck(task, e.target.checked ? 'done' : 'new')
@@ -28,7 +28,7 @@ function TaskItem({ task, onCheck, onEdit, onDelete }) {
             'badge-danger': task.daysLeft <= 0
           })}
         >
-          {distanceInWordsStrict(new Date(), task.deadline, { addSuffix: true, unit: 'd', partialMethod: 'ceil' })}
+          {formatDistanceStrict(new Date(), task.deadline, { addSuffix: true, unit: 'd', partialMethod: 'ceil' })}
         </span>
       )}
     </td>
